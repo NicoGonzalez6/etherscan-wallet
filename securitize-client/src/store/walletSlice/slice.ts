@@ -7,7 +7,7 @@ import {
   toogleWalletIsFavorite,
   deleteWallet,
 } from "./actions";
-import { EwalletLoadingStates } from "./interface";
+import { EloadingStates } from "../../global/interfaces/loading.interface";
 
 const walletSlice = createSlice({
   name: "wallet",
@@ -24,7 +24,7 @@ const walletSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllWallets.pending, (state) => {
-      state.isWalletLoading = EwalletLoadingStates.getting;
+      state.isWalletLoading = EloadingStates.getting;
     });
     builder.addCase(getAllWallets.fulfilled, (state, { payload }) => {
       state.isWalletLoading = undefined;
@@ -32,7 +32,7 @@ const walletSlice = createSlice({
     });
 
     builder.addCase(createWallet.pending, (state) => {
-      state.isWalletLoading = EwalletLoadingStates.creating;
+      state.isWalletLoading = EloadingStates.creating;
       state.errorMsg = undefined;
       state.isWalletError = false;
     });
@@ -48,20 +48,20 @@ const walletSlice = createSlice({
     builder.addCase(
       getCurrencyExchangeValues.fulfilled,
       (state, { payload }) => {
-        state.isWalletLoading = EwalletLoadingStates.gettingExchange;
+        state.isWalletLoading = EloadingStates.gettingExchange;
         state.convertedCurrencyValue = payload as number;
       }
     );
 
     builder.addCase(toogleWalletIsFavorite.pending, (state) => {
-      state.isWalletLoading = EwalletLoadingStates.updating;
+      state.isWalletLoading = EloadingStates.updating;
     });
 
     builder.addCase(toogleWalletIsFavorite.fulfilled, (state) => {
       state.isWalletLoading = undefined;
     });
     builder.addCase(deleteWallet.pending, (state) => {
-      state.isWalletLoading = EwalletLoadingStates.erasing;
+      state.isWalletLoading = EloadingStates.erasing;
     });
 
     builder.addCase(deleteWallet.fulfilled, (state) => {

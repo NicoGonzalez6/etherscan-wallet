@@ -24,9 +24,8 @@ const Container = styled.div`
 
 const RateCardsContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.md};
+  gap: ${({ theme }) => theme.spacing.xlg};
 `;
 
 const WalletsContainer = styled.div`

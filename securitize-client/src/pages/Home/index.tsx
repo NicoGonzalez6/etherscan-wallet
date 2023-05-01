@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useMemo, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import { Layout } from "../../containers/Layout";
@@ -41,14 +41,29 @@ import {
   cleanSelectedWallet,
 } from "../../store/walletSlice/slice";
 import { WalletDetails } from "../../components/WalletDetails";
-import {
-  EwalletLoadingStates,
-  Iwallet,
-} from "../../store/walletSlice/interface";
+import { Iwallet } from "../../store/walletSlice/interface";
 import { Text } from "../../components/Text";
-import { EexchangetLoadingStates } from "../../store/exchangeSlice/interface";
+import { EloadingStates } from "../../global/interfaces/loading.interface";
 
 const Home = () => {
+  const [showEditExchange, setShowEditExchange] = useState<boolean>(false);
+  const [deleteModal, setDeleteModal] = useState<boolean>(false);
+  const [orderBy] = useState<{ label: string; id: number }[]>([
+    {
+      label: "by creation date",
+      id: 0,
+    },
+    {
+      label: "by favorites",
+      id: 1,
+    },
+  ]);
+  const [selectedOrder, setSelectedOrder] = useState(0);
+
+  const [selectedIdExchange, setSelectedIdExchange] = useState<
+    number | undefined
+  >(undefined);
+
   const { isRateLoading, exchangeRates } = useAppSelector(
     (state) => state.exchangeReducer
   );
@@ -84,7 +99,7 @@ const Home = () => {
 
   const newWalletHandler = async (values: InewWalletForm): Promise<void> => {
     await Dispatch(createWallet(values));
-    await Dispatch(getAllWallets());
+    await Dispatch(getAllWallets(selectedOrder as number));
   };
 
   const newWalletForm = useForm(
@@ -92,12 +107,6 @@ const Home = () => {
     newWalletHandler,
     newWalletValidationSchema
   );
-
-  const [showEditExchange, setShowEditExchange] = useState<boolean>(false);
-
-  const [selectedIdExchange, setSelectedIdExchange] = useState<
-    number | undefined
-  >(undefined);
 
   const showEditExchangeHandler = (id?: number): void => {
     if (id) {
@@ -108,24 +117,11 @@ const Home = () => {
     setShowEditExchange(!showEditExchange);
   };
 
-  const [orderBy] = useState([
-    {
-      label: "by creation date",
-      id: 0,
-    },
-    {
-      label: "by favorites",
-      id: 1,
-    },
-  ]);
-
   const orderHandler: any = (evt: {
     target: { value: SetStateAction<number> };
   }) => {
     setSelectedOrder(evt.target.value);
   };
-
-  const [selectedOrder, setSelectedOrder] = useState(0);
 
   useEffect(() => {
     Dispatch(getAllExchangeRates());
@@ -137,11 +133,9 @@ const Home = () => {
 
   const favoriteHandler = async (id: number) => {
     await Dispatch(toogleWalletIsFavorite(id));
-    await Dispatch(getAllWallets());
+    await Dispatch(getAllWallets(selectedOrder as number));
     await Dispatch(selectWallet(id));
   };
-
-  const [deleteModal, setDeleteModal] = useState<boolean>(false);
 
   const deleteModalHandler = () => {
     setDeleteModal(!deleteModal);
@@ -149,7 +143,7 @@ const Home = () => {
 
   const deleteHandler = async (id: number) => {
     await Dispatch(deleteWallet(id));
-    await Dispatch(getAllWallets());
+    await Dispatch(getAllWallets(selectedOrder as number));
     await Dispatch(cleanSelectedWallet());
     setDeleteModal(false);
   };
@@ -166,8 +160,8 @@ const Home = () => {
             onCancel={showEditExchangeHandler}
             title="Edit exchange rate"
             onConfirm={editExchangeForm.handleSubmit}
-            isDisabled={isRateLoading == EexchangetLoadingStates.updating}
-            isLoading={isRateLoading == EexchangetLoadingStates.updating}
+            isDisabled={isRateLoading == EloadingStates.updating}
+            isLoading={isRateLoading == EloadingStates.updating}
           >
             {initialExchangeFormValues.map((field: IinitialFormValues, i) => {
               return (
@@ -192,8 +186,8 @@ const Home = () => {
             onCancel={deleteModalHandler}
             title="Delete Wallet"
             onConfirm={() => deleteHandler(selectedWallet?.id as number)}
-            isDisabled={isWalletLoading == EwalletLoadingStates.erasing}
-            isLoading={isWalletLoading == EwalletLoadingStates.erasing}
+            isDisabled={isWalletLoading == EloadingStates.erasing}
+            isLoading={isWalletLoading == EloadingStates.erasing}
           >
             <Text tColor="primary" tType="text">
               Please confirm this action
@@ -225,8 +219,8 @@ const Home = () => {
                 );
               })}
               <Button
-                isDisabled={isWalletLoading == EwalletLoadingStates.creating}
-                isLoading={isWalletLoading == EwalletLoadingStates.creating}
+                isDisabled={isWalletLoading == EloadingStates.creating}
+                isLoading={isWalletLoading == EloadingStates.creating}
                 onClick={newWalletForm.handleSubmit}
               >
                 Save
@@ -234,7 +228,7 @@ const Home = () => {
             </StyledForm>
           </SectionLayout>
           <SectionLayout
-            isLoading={isRateLoading == EexchangetLoadingStates.getting}
+            isLoading={isRateLoading == EloadingStates.getting}
             sectionTitle="Exchange Rates"
           >
             <RateCardsContainer>
@@ -255,28 +249,30 @@ const Home = () => {
         <Container>
           <SectionLayout
             isLoading={
-              isWalletLoading == EwalletLoadingStates.getting ||
-              isWalletLoading == EwalletLoadingStates.erasing
+              isWalletLoading == EloadingStates.getting ||
+              isWalletLoading == EloadingStates.erasing
             }
             sectionTitle="Select a wallet"
           >
             <WalletsContainer>
-              <select onChange={orderHandler}>
-                {orderBy.map((order) => {
-                  return <option value={order.id}>{order.label}</option>;
-                })}
-              </select>
               {wallets && wallets?.length >= 1 ? (
-                wallets.map((wallet) => {
-                  return (
-                    <WalletCard
-                      onClick={() => selectWalletHandler(wallet.id as number)}
-                      isFavorite={wallet.isFavorite}
-                      key={wallet.id}
-                      address={wallet.address}
-                    />
-                  );
-                })
+                <>
+                  <select value={selectedOrder} onChange={orderHandler}>
+                    {orderBy.map((order) => {
+                      return <option value={order.id}>{order.label}</option>;
+                    })}
+                  </select>
+                  {wallets.map((wallet) => {
+                    return (
+                      <WalletCard
+                        onClick={() => selectWalletHandler(wallet.id as number)}
+                        isFavorite={wallet.isFavorite}
+                        key={wallet.id}
+                        address={wallet.address}
+                      />
+                    );
+                  })}
+                </>
               ) : (
                 <Text tType="text" tColor="white">
                   No wallets created
@@ -285,7 +281,7 @@ const Home = () => {
             </WalletsContainer>
           </SectionLayout>
           <SectionLayout
-            isLoading={isWalletLoading == EwalletLoadingStates.updating}
+            isLoading={isWalletLoading == EloadingStates.updating}
             sectionTitle="Wallet Details"
           >
             {selectedWallet ? (

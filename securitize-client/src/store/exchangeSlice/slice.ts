@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { initialExchangeValues } from "./constant";
 import { getAllExchangeRates, editExchangeRate } from "./actions";
-import { EexchangetLoadingStates } from "./interface";
+import { EloadingStates } from "../../global/interfaces/loading.interface";
 
 const exchangeSlice = createSlice({
   name: "exchange",
@@ -9,7 +9,7 @@ const exchangeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllExchangeRates.pending, (state) => {
-      state.isRateLoading = EexchangetLoadingStates.getting;
+      state.isRateLoading = EloadingStates.getting;
       state.errorMsg = undefined;
       state.isError = false;
     });
@@ -18,7 +18,7 @@ const exchangeSlice = createSlice({
       state.exchangeRates = payload;
     });
     builder.addCase(editExchangeRate.pending, (state) => {
-      state.isRateLoading = EexchangetLoadingStates.updating;
+      state.isRateLoading = EloadingStates.updating;
     });
     builder.addCase(editExchangeRate.fulfilled, (state) => {
       state.isRateLoading = undefined;

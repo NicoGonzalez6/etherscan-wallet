@@ -44,7 +44,7 @@ const WalletDetails: React.FC<IwalletDetails> = ({
     <StyledWalletDetails>
       <SectionContainer>
         <Text tColor="white" tbold tType="text">
-          Wallet Addres
+          Wallet Address
         </Text>
         <Text tColor="white" tType="text">
           {address}
@@ -117,7 +117,7 @@ const WalletDetails: React.FC<IwalletDetails> = ({
       <SectionContainer row>
         <Button onClick={() => onDelete && onDelete()}>Delete Wallet</Button>
         <Button onClick={() => onClick && onClick(id as number)}>
-          Set as favorite
+          {isFavorite ? "Remove favorite" : "Set as favorite"}
         </Button>
       </SectionContainer>
     </StyledWalletDetails>

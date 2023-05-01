@@ -1,3 +1,5 @@
+import { EloadingStates } from "../../global/interfaces/loading.interface";
+
 export interface Iwallet {
   id?: number;
   address: string;
@@ -9,17 +11,9 @@ export interface Iwallet {
   updatedAt: Date;
 }
 
-export enum EwalletLoadingStates {
-  creating = "creating",
-  updating = "updating",
-  erasing = "erasing",
-  getting = "getting",
-  gettingExchange = "gettingExchange",
-}
-
 export interface IinitialWalletValues {
   wallets: Iwallet[] | undefined;
-  isWalletLoading: keyof typeof EwalletLoadingStates | undefined;
+  isWalletLoading: keyof typeof EloadingStates | undefined;
   isWalletError: boolean;
   errorMsg: string | undefined;
   selectedWallet: Iwallet | undefined;

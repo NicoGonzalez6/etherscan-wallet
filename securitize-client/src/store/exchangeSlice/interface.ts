@@ -1,12 +1,8 @@
 import { IexchangeRate } from "../../global/interfaces/form.interface";
-
-export enum EexchangetLoadingStates {
-  updating = "updating",
-  getting = "getting",
-}
+import { EloadingStates } from "../../global/interfaces/loading.interface";
 
 export interface IinitialExchangeValues {
-  isRateLoading: keyof typeof EexchangetLoadingStates | undefined;
+  isRateLoading: keyof typeof EloadingStates | undefined;
   exchangeRates: IexchangeRate[] | undefined;
   isError: boolean;
   errorMsg: string | undefined;

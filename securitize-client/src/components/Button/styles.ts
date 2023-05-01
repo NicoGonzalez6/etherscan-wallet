@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import { Ibutton } from "./interface";
 
 const StyledButton = styled.div<Ibutton>`
-  width: 150px;
+  width: 160px;
   height: 35px;
   background-color: ${({ theme }) => theme.colors.softPrimary};
   display: flex;

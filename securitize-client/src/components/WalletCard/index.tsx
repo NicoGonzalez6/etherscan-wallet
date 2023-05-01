@@ -15,7 +15,7 @@ const WalletCard: React.FC<IwalletCard> = ({
       address={address}
       onClick={onClick}
     >
-      <Text tColor="black" tType="text">
+      <Text tColor="white" tType="text">
         {address}
       </Text>
       {isFavorite ? <AiFillStar /> : <AiOutlineStar />}
