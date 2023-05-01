@@ -97,14 +97,14 @@ const Home = () => {
     editExchangeValidationSchema
   );
 
-  const newWalletHandler = async (values: InewWalletForm): Promise<void> => {
+  const createWalletHandler = async (values: InewWalletForm): Promise<void> => {
     await Dispatch(createWallet(values));
     await Dispatch(getAllWallets(selectedOrder as number));
   };
 
   const newWalletForm = useForm(
     initialNewWalletValues,
-    newWalletHandler,
+    createWalletHandler,
     newWalletValidationSchema
   );
 
@@ -202,6 +202,7 @@ const Home = () => {
                 return (
                   <Input
                     label="Search by address"
+                    placeholder="0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
                     key={i}
                     name={field.name}
                     id={field.id}
@@ -252,7 +253,7 @@ const Home = () => {
               isWalletLoading == EloadingStates.getting ||
               isWalletLoading == EloadingStates.erasing
             }
-            sectionTitle="Select a wallet"
+            sectionTitle="Select a Wallet"
           >
             <WalletsContainer>
               {wallets && wallets?.length >= 1 ? (
@@ -293,7 +294,9 @@ const Home = () => {
                 convertedCurrencyValue={convertedCurrencyValue}
               />
             ) : (
-              <div>No wallet selected</div>
+              <Text tType="text" tColor="white">
+                No wallets created
+              </Text>
             )}
           </SectionLayout>
         </Container>
