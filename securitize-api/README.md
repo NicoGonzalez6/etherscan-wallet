@@ -17,7 +17,7 @@ API_KEY = API KEY
 
 ```
 
-- Luego ejecutar los siguientes scripts para preparar el ambiente, (ejecutar las migraciones y seeds).
+- Luego ejecutar los siguientes scripts para preparar el ambiente, (ejecutar las migraciones y los seeds).
 
 ```bash
 $ npm install
@@ -31,7 +31,7 @@ $ npm run populatedb
 
 ## Info extra
 
-- Ejecutando los siguientes scripts podremos levantar el server local.
+- Ejecutando el siguiente script podremos levantar el server local.
 
 ```bash
 $ npm run start:dev
