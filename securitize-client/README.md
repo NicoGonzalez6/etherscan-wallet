@@ -6,7 +6,7 @@
 VITE_API_URL = http://localhost:3999/api/
 ```
 
-- Luego ejecutar el siguiente script para instalar las dependencias
+- Luego ejecutar los siguientes scripts para instalar las dependencias e iniciar el ambiente de desarrollo
 
 ```bash
 
