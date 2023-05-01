@@ -36,3 +36,6 @@ $ npm run populatedb
 ```bash
 $ npm run start:dev
 ```
+
+- BASE_API_URL = http://localhost:3999/api
+- SWAGGER_URL = http://localhost:3999/docs
