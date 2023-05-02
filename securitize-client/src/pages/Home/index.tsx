@@ -295,7 +295,7 @@ const Home = () => {
               />
             ) : (
               <Text tType="text" tColor="white">
-                No wallets created
+                No wallet selected
               </Text>
             )}
           </SectionLayout>
